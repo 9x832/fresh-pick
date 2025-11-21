@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.agrismart.agrimallbackend.mapper.common.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.agrismart.agrimallbackend.entity.common.Comment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap type="com.agrismart.agrimallbackend.entity.common.Comment"  id="CommentMap">
+    <id column="comment_id" jdbcType="BIGINT" property="id" />
+    <result column="comment_product_id" jdbcType="BIGINT" property="productId" />
+    <result column="comment_user_id" jdbcType="BIGINT" property="userId" />
+    <result column="comment_content" jdbcType="VARCHAR" property="content" />
+    <result column="comment_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="comment_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <association property="user" javaType="com.agrismart.agrimallbackend.entity.common.User">
+      <id column="user_id" jdbcType="BIGINT" property="id" />
+      <result column="username" jdbcType="VARCHAR" property="username" />
+      <result column="password" jdbcType="VARCHAR" property="password" />
+      <result column="email" jdbcType="VARCHAR" property="email" />
+      <result column="phone" jdbcType="VARCHAR" property="phone" />
+      <result column="head_pic" jdbcType="VARCHAR" property="headPic" />
+      <result column="user_create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="user_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </association>
+    <association property="product" javaType="com.agrismart.agrimallbackend.entity.common.Product">
+      <id column="product_id" jdbcType="BIGINT" property="id" />
+      <result column="product_name" jdbcType="VARCHAR" property="productName" />
+      <result column="info" jdbcType="VARCHAR" property="info" />
+      <result column="product_pic" jdbcType="VARCHAR" property="productPic" />
+      <result column="price" jdbcType="DECIMAL" property="price" />
+      <result column="stock" jdbcType="INTEGER" property="stock" />
+      <result column="sell_num" jdbcType="INTEGER" property="sellNum" />
+      <result column="comment_num" jdbcType="INTEGER" property="commentNum" />
+      <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+      <result column="product_create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="product_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_id, user_id, content, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_comment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectBySearchContent" parameterType="java.lang.String" resultMap="CommentMap">
+   select
+    c.id as comment_id,
+    c.product_id as comment_product_id,
+    c.user_id as comment_user_id,
+    c.content as comment_content,
+    c.create_time as comment_create_time,
+    c.update_time as comment_update_time,
+    u.id as user_id,
+    u.username,
+    u.password,
+    u.email,
+    u.phone,
+    u.head_pic,
+    u.create_time as user_create_time,
+    u.update_time as user_update_time,
+    p.id as product_id,
+    p.product_name,
+    p.info,
+    p.product_pic,
+    p.price,
+    p.stock,
+    p.sell_num,
+    p.comment_num,
+    p.category_id,
+    p.create_time as product_create_time,
+    p.update_time as product_update_time
+    from mall_comment c
+    left join mall_user u on c.user_id = u.id
+    left join mall_product p on c.product_id = p.id
+    where c.content like concat('%',#{content,jdbcType=VARCHAR},'%')
+    order by c.create_time desc
+  </select>
+  <select id="selectAll" resultMap="CommentMap">
+    select
+    c.id as comment_id,
+    c.product_id as comment_product_id,
+    c.user_id as comment_user_id,
+    c.content as comment_content,
+    c.create_time as comment_create_time,
+    c.update_time as comment_update_time,
+    u.id as user_id,
+    u.username,
+    u.password,
+    u.email,
+    u.phone,
+    u.head_pic,
+    u.create_time as user_create_time,
+    u.update_time as user_update_time,
+    p.id as product_id,
+    p.product_name,
+    p.info,
+    p.product_pic,
+    p.price,
+    p.stock,
+    p.sell_num,
+    p.comment_num,
+    p.category_id,
+    p.create_time as product_create_time,
+    p.update_time as product_update_time
+    from mall_comment c
+    left join mall_user u on c.user_id = u.id
+    left join mall_product p on c.product_id = p.id
+    order by c.create_time desc
+  </select>
+  <select id="selectByProductId" parameterType="java.lang.Long" resultMap="CommentMap">
+    select
+    c.id as comment_id,
+    c.product_id as comment_product_id,
+    c.user_id as comment_user_id,
+    c.content as comment_content,
+    c.create_time as comment_create_time,
+    c.update_time as comment_update_time,
+    u.id as user_id,
+    u.username,
+    u.password,
+    u.email,
+    u.phone,
+    u.head_pic,
+    u.create_time as user_create_time,
+    u.update_time as user_update_time,
+    p.id as product_id,
+    p.product_name,
+    p.info,
+    p.product_pic,
+    p.price,
+    p.stock,
+    p.sell_num,
+    p.comment_num,
+    p.category_id,
+    p.create_time as product_create_time,
+    p.update_time as product_update_time
+    from mall_comment c
+    left join mall_user u on c.user_id = u.id
+    left join mall_product p on c.product_id = p.id
+    where c.product_id = #{productId,jdbcType=BIGINT}
+    order by c.create_time desc
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="CommentMap">
+    select
+    c.id as comment_id,
+    c.product_id as comment_product_id,
+    c.user_id as comment_user_id,
+    c.content as comment_content,
+    c.create_time as comment_create_time,
+    c.update_time as comment_update_time,
+    u.id as user_id,
+    u.username,
+    u.password,
+    u.email,
+    u.phone,
+    u.head_pic,
+    u.create_time as user_create_time,
+    u.update_time as user_update_time,
+    p.id as product_id,
+    p.product_name,
+    p.info,
+    p.product_pic,
+    p.price,
+    p.stock,
+    p.sell_num,
+    p.comment_num,
+    p.category_id,
+    p.create_time as product_create_time,
+    p.update_time as product_update_time
+    from mall_comment c
+    left join mall_user u on c.user_id = u.id
+    left join mall_product p on c.product_id = p.id
+    where c.user_id = #{userId,jdbcType=BIGINT}
+    order by c.create_time desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_comment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.agrismart.agrimallbackend.entity.common.Comment">
+    insert into mall_comment (id, product_id, user_id,
+      content, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+      #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.agrismart.agrimallbackend.entity.common.Comment">
+    insert into mall_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.agrismart.agrimallbackend.entity.common.Comment">
+    update mall_comment
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.agrismart.agrimallbackend.entity.common.Comment">
+    update mall_comment
+    set product_id = #{productId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
+

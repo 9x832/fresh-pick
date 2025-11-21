@@ -1,0 +1,101 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 7200  # Session超时时间
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+
+spring:
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  freemarker:
+    allow-request-override: false
+    cache: false
+    check-template-location: true
+    charset: UTF-8
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+    prefix: ""
+    settings:
+      template_update_delay: 0
+      default_encoding: UTF-8
+      number_format: "0.##"
+    suffix: .ftl
+    template-loader-path: "classpath:/templates/"
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/fresh_pick_delivery?serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: "123456"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    validation-query: "SELECT 1 FROM DUAL"
+    time-between-eviction-runs-millis: 300000
+    min-evictable-idle-time-millis: 1800000
+    initial-size: 5
+    max-active: 50
+    max-wait: 60000
+    min-idle: 5
+  devtools:
+    restart:
+      enabled: true
+  # 邮件配置
+  mail:
+    host: smtp.qq.com          # SMTP 服务器地址
+    port: 465                  # SSL 端口（也有人用 587）
+    username: 1702344540@qq.com      # 发送用邮箱
+    password: vfqrhworlmcwdacg       # 生成的授权码
+    protocol: smtps            # 如果使用 465 端口，对应 smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+
+  # Redis配置
+  sql:
+    init:
+      continue-on-error: false
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+  # Spring Session配置 - 将Session存储到Redis
+  session:
+    store-type: redis
+    timeout: 7200s  # Session超时时间
+
+# MyBatis配置
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations:
+    - "classpath*:mappers/admin/*.xml"
+    - "classpath*:mappers/home/*.xml"
+    - "classpath*:mappers/common/*.xml"
+
+# 自定义上传配置
+xqx:
+  upload:
+    photo:
+      sufix: ".jpg,.png,.gif,.jpeg"
+      maxsize: 1024
+      # 使用相对路径，相对于项目运行的工作目录（开发环境为项目根目录，生产环境为jar包所在目录）
+      # 如果使用绝对路径，直接写完整路径即可，例如：C:/uploads/photo
+      path: "upload/photo"
+    attachment:
+      maxsize: 204800
+      # 使用相对路径，相对于项目运行的工作目录
+      path: "upload/attachment"
