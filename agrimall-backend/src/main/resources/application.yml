@@ -52,8 +52,8 @@ spring:
   mail:
     host: smtp.qq.com          # SMTP 服务器地址
     port: 465                  # SSL 端口（也有人用 587）
-    username: 1702344540@qq.com      # 发送用邮箱
-    password: vfqrhworlmcwdacg       # 生成的授权码
+    username:       # 发送用邮箱
+    password:        # 生成的授权码
     protocol: smtps            # 如果使用 465 端口，对应 smtps
     properties:
       mail:
@@ -92,10 +92,7 @@ xqx:
     photo:
       sufix: ".jpg,.png,.gif,.jpeg"
       maxsize: 1024
-      # 使用相对路径，相对于项目运行的工作目录（开发环境为项目根目录，生产环境为jar包所在目录）
-      # 如果使用绝对路径，直接写完整路径即可，例如：C:/uploads/photo
       path: "upload/photo"
     attachment:
       maxsize: 204800
-      # 使用相对路径，相对于项目运行的工作目录
       path: "upload/attachment"
